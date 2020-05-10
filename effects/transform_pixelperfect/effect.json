@@ -1,0 +1,19 @@
+{
+	"version" : 1,
+	"name" : "Transform (Pixel Perfect)",
+	"description" : "Apply scaling, rotation and offsets to the image. Avoids filtering pixels as much as possible.",
+	"group" : "distort",
+	"preview" : "preview/project.json",
+	"passes" :
+	[
+		{
+			"material" : "materials/effects/transform_pixelperfect.json"
+		}
+	],
+	"dependencies" :
+	[
+		"materials/effects/transform_pixelperfect.json",
+		"shaders/effects/transform_pixelperfect.frag",
+		"shaders/effects/transform_pixelperfect.vert"
+	]
+}

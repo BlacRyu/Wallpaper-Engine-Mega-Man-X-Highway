@@ -1,0 +1,23 @@
+
+
+ToDo:
+	- Import all the remaining backgrounds and foregrounds.
+	- Script a time of day system.
+	- Export the remaining armor upgrades and hook them up to user properties.
+	- Add music.
+
+
+
+
+
+
+
+Done:
+	- Add a slider for the CRT effect to scale the strength of its effects.
+
+
+400x36 spritesheet
+
+40x36 sprite size
+
+x: 35

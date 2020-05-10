@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/Perspective_Mask.json",
+		"shaders/effects/Perspective_Mask.frag",
+		"shaders/effects/Perspective_Mask.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Perspective Mask",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/Perspective_Mask.json"
+		}
+	],
+	"replacementkey" : "Perspective_Mask",
+	"version" : 1
+}

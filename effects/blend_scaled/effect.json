@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/blend_scaled.json",
+		"shaders/effects/blend_scaled.frag",
+		"shaders/effects/blend_scaled.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Blend Scaled",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/blend_scaled.json"
+		}
+	],
+	"replacementkey" : "blend_scaled",
+	"version" : 1
+}

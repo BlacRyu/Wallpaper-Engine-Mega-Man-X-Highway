@@ -1,0 +1,1150 @@
+{
+	"camera" : 
+	{
+		"center" : "0.000 0.000 -1.000",
+		"eye" : "0.000 0.000 0.000",
+		"up" : "0.000 1.000 0.000"
+	},
+	"general" : 
+	{
+		"ambientcolor" : "0.300 0.300 0.300",
+		"bloom" : false,
+		"bloomstrength" : 2.0,
+		"bloomthreshold" : 0.64999997615814209,
+		"camerafade" : true,
+		"cameraparallax" : false,
+		"cameraparallaxamount" : 0.5,
+		"cameraparallaxdelay" : 0.10000000149011612,
+		"cameraparallaxmouseinfluence" : 0.0,
+		"camerapreview" : true,
+		"camerashake" : false,
+		"camerashakeamplitude" : 0.5,
+		"camerashakeroughness" : 1.0,
+		"camerashakespeed" : 3.0,
+		"clearcolor" : "0.700 0.700 0.700",
+		"clearenabled" : true,
+		"farz" : 10000.0,
+		"fov" : 50.0,
+		"nearz" : 0.0099999997764825821,
+		"orthogonalprojection" : 
+		{
+			"height" : 256,
+			"width" : 512
+		},
+		"skylightcolor" : "0.300 0.300 0.300"
+	},
+	"objects" : 
+	[
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 173,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"repeat" : "1 1",
+								"speedx" : 
+								{
+									"user" : "bg_speed",
+									"value" : 0.40000000596046448
+								},
+								"speedy" : 0
+							},
+							"id" : 174
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/Perspective_Mask/effect.json",
+					"id" : 475,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tconsole.log(Object.keys(thisObject));\n\t// console.log(`scale before: ${thisObject.scale}`);\n\t// if (userProperties.perspective !== undefined)\n\t// \tthisObject.scale = userProperties.perspective;\n\t// console.log(`scale after: ${thisObject.scale}`);\n}\n",
+									"value" : 1
+								},
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.perspective !== undefined)\n\t\tthisObject.scale = userProperties.perspective * 1.0;\n}\n",
+									"value" : 1
+								}
+							},
+							"id" : 476,
+							"textures" : [ null, "BGDepth" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 33,
+			"image" : "models/BG1.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "BG1",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 38,
+			"image" : "models/BG2.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "BG2",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 108,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"repeat" : "1 1",
+								"speedx" : 0.17499999999999999,
+								"speedy" : 0
+							},
+							"id" : 109
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 42,
+			"image" : "models/BG12.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "BG12",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 176,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.40000000596046448
+								},
+								"speedy" : 0
+							},
+							"id" : 177
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/Perspective_Mask/effect.json",
+					"id" : 266,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"MODE" : 0,
+								"REPEAT" : 0,
+								"REPEATX" : 1,
+								"REPEATY" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"Mask Scroll X" : 0.40000000000000002,
+								"Mask scroll speed" : "0.16 0",
+								"Scale" : 3,
+								"bottom" : 0.29999999999999999,
+								"left" : 0.29999999999999999,
+								"right" : 0.29999999999999999,
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.perspective !== undefined)\n\t\tthisObject.scale = userProperties.perspective * 3.0;\n}\n",
+									"value" : 1
+								},
+								"speedx" : 0.40000000000000002,
+								"speedy" : 0,
+								"top" : 0.29999999999999999
+							},
+							"id" : 267,
+							"textures" : [ null, "FGDepth" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 52,
+			"image" : "models/FG1.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "FG1",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 56,
+			"image" : "models/FG2.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "FG2",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 60,
+			"image" : "models/FG3.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "FG3",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 467,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.375
+								},
+								"speedy" : 0
+							},
+							"id" : 468
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/perspective/effect.json",
+					"id" : 464,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"top" : 0.050000000000000003
+							},
+							"id" : 465
+						}
+					],
+					"visible" : false
+				}
+			],
+			"id" : 709,
+			"image" : "models/FG12.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "FG12",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"config" : 
+			{
+				"passthrough" : true
+			},
+			"copybackground" : true,
+			"id" : 104,
+			"image" : "models/util/composelayer.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "BG Container (Composition)",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"config" : 
+			{
+				"passthrough" : true
+			},
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 361,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0,
+								"WRITEALPHA" : 0
+							},
+							"id" : 363,
+							"textures" : [ null, "util/white" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 392,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"repeat" : "1 1",
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.20000000298023224
+								},
+								"speedy" : 0
+							},
+							"id" : 393
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/Perspective_Mask/effect.json",
+					"id" : 402,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Scale" : 3
+							},
+							"id" : 403,
+							"textures" : [ null, "FGDepth" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 359,
+			"image" : "models/util/composelayer.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "Background Scroll + Perspective",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 593,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"id" : 594,
+							"textures" : [ null, "util/white" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 604,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.375
+								},
+								"speedy" : 0
+							},
+							"id" : 605
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 589,
+			"image" : "models/512x256 White.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "Background Capture + Scroll (512x256 White) (Unused)",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/opacity/effect.json",
+					"id" : 314,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"id" : 315,
+							"textures" : [ null, "util/white" ]
+						}
+					],
+					"visible" : false
+				}
+			],
+			"id" : 25,
+			"image" : "models/MMX1BodyRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX1BodyRun",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n// let position = 0.25;\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.megaman_position !== undefined)\n\t{\n\t\t// position = userProperties.megaman_position;\n\n\t\tlet newPos = new Vec3(engine.canvasSize.x * userProperties.megaman_position, thisLayer.origin.y, thisLayer.origin.z);\n\n\t\tthisLayer.origin = newPos;\n\t\tthisScene.getLayer(\"MMX1HelmetRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX2HelmetRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX1ArmsRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX1BootsRun\").origin = newPos;\n\t}\n\tif (userProperties.show_megaman !== undefined)\n\t{\n\t\tlet alpha = new Vec3(userProperties.show_megaman ? 1 : 0);\n\t\tthisLayer.scale = alpha;\n\t\tthisScene.getLayer(\"MMX1HelmetRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX2HelmetRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX1ArmsRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX1BootsRun\").scale = alpha;\n\t}\n}\n",
+				"value" : "256.000 131.000 0.000"
+			},
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 28,
+			"image" : "models/MMX1HelmetRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX1HelmetRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 20,
+			"image" : "models/MMX2HelmetRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX2HelmetRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 3551,
+			"image" : "models/MMX1ArmsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX1ArmsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 24,
+			"image" : "models/MMX1BootsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX1BootsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 547,
+					"name" : "Scroll mask",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"repeat" : "1 1",
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.375
+								},
+								"speedy" : 0
+							},
+							"id" : 548
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 480,
+					"name" : "Insert Background (Blend)",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"WRITEALPHA" : 0
+							},
+							"id" : 481,
+							"textures" : [ null, "util/white" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/transform/effect.json",
+					"id" : 155,
+					"name" : "Sharpen Pixels (Null Transform)",
+					"passes" : 
+					[
+						{
+							"id" : 156
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 478,
+			"image" : "models/Foreground Mask.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "Foreground Mask (Unused)",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 408,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"speedx" : 
+								{
+									"user" : "fg_speed",
+									"value" : 0.20000000298023224
+								},
+								"speedy" : 0
+							},
+							"id" : 409
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 327,
+			"image" : "models/FGLamps1.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "FGLamps1",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : 
+			{
+				"user" : "foreground_lamps",
+				"value" : true
+			}
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"config" : 
+			{
+				"passthrough" : true
+			},
+			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/transform/effect.json",
+					"id" : 125,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"MODE" : 0
+							},
+							"id" : 126
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 123,
+			"image" : "models/util/composelayer.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "Final Scene capture (Compose)",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"dependencies" : [ 123 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 142,
+					"name" : "Get Final Scene capture",
+					"passes" : 
+					[
+						{
+							"id" : 143,
+							"textures" : [ null, "_rt_imageLayerComposite_123_a" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/transform/effect.json",
+					"id" : 150,
+					"name" : "Sharpen Pixels (Null Transform)",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"CLAMP" : 1,
+								"MODE" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"angle" : 0.0,
+								"offset" : "0 0",
+								"scale" : "1 1"
+							},
+							"id" : 151
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 140,
+			"image" : "models/512x256 White.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "Pixel step (512x256 White)",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "512.000 256.000",
+			"solid" : true,
+			"visible" : 
+			{
+				"user" : "low_precision_pixels",
+				"value" : false
+			}
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"dependencies" : [ 362, 362, 362 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend_scaled/effect.json",
+					"id" : 836,
+					"name" : "Screen Pixels",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 11
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 
+								{
+									"user" : "crt_effect",
+									"value" : 1
+								},
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value (for property 'scale')\n */\nexport function init(value) {\n\treturn engine.screenResolution.multiply(0.2);\n}\n\n/**\n * @param {Vec2} size\n */\nexport function resizeScreen(size) {\n\tthisObject.scale = size.multiply(0.2);\n}\n",
+									"value" : "512 256"
+								}
+							},
+							"id" : 837,
+							"textures" : [ null, "pixel" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 397,
+					"name" : "CRT Glow Lighten",
+					"passes" : 
+					[
+						{
+							"id" : 398
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 399
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 1,
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 400
+						},
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 6,
+								"COMPOSITE" : 1,
+								"COMPOSITEMONO" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"compositealpha" : 
+								{
+									"user" : "crt_effect",
+									"value" : 1
+								},
+								"compositecolor" : "1 1 1",
+								"compositeoffset" : "0 0"
+							},
+							"id" : 401,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 127,
+					"name" : "CRT Glow Linear Dodge",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 128
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2,
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 129
+						},
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 9,
+								"COMPOSITE" : 1,
+								"COMPOSITEMONO" : 0,
+								"KERNEL" : 2,
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"compositealpha" : 0.5,
+								"compositecolor" : "1 1 1",
+								"compositeoffset" : "0 0"
+							},
+							"id" : 130,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
+						},
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 9,
+								"COMPOSITE" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"compositealpha" : 0.34999999999999998,
+								"compositeoffset" : "0 0"
+							},
+							"id" : 131,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_b" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 563,
+					"name" : "Vignette (Blend)",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 2,
+								"WRITEALPHA" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.multiply = userProperties.crt_effect * 0.5;\n}\n",
+									"value" : 0.5
+								}
+							},
+							"id" : 564,
+							"textures" : [ null, "Vignette" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/transform/effect.json",
+					"id" : 446,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"CLAMP" : 1,
+								"MODE" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"angle" : 0,
+								"offset" : "0 0",
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(1.0 + userProperties.crt_effect * .05);\n}\n",
+									"value" : "1.05 1.05"
+								}
+							},
+							"id" : 447
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/fisheye/effect.json",
+					"id" : 364,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BACKGROUND" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"center" : "0.5 0.5",
+								"distortion" : 
+								{
+									"script" : "// Fisheye - Distortion\n'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.distortion = userProperties.crt_effect * .3;\n}\n",
+									"value" : 0.30000001192092896
+								},
+								"size" : 
+								{
+									"script" : "// // Fisheye - Size\n// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.size = 1.0 + userProperties.crt_effect * .5;\n// }\n",
+									"value" : 1.5
+								}
+							},
+							"id" : 365
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blend_scaled/effect.json",
+					"id" : 312,
+					"name" : "CRT Screen Border",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0,
+								"WRITEALPHA" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"center" : "0.5 0.5",
+								"multiply" : 1.0,
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(\n\t\t\t0.75 + userProperties.crt_effect * .225,\n\t\t\t0.7 + userProperties.crt_effect * .25\n\t\t);\n}\n",
+									"value" : "1 1"
+								}
+							},
+							"id" : 313,
+							"textures" : [ null, "CRT Border" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 362,
+			"image" : "models/util/fullscreenlayer.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "CRT (Fullscreen)",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"solid" : true,
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.visible = userProperties.crt_effect > 0.001;\n}\n",
+				"value" : true
+			}
+		}
+	]
+}
