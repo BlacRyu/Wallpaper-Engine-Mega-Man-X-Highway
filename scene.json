@@ -97,75 +97,18 @@
 			"image" : "models/BG1.json",
 			"ledsource" : false,
 			"locktransforms" : false,
-			"name" : "BG1",
+			"name" : "Time of Day script",
 			"origin" : "256.000 128.000 0.000",
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
 			"scale" : "1.000 1.000 1.000",
 			"size" : "512.000 256.000",
 			"solid" : true,
-			"visible" : true
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"id" : 38,
-			"image" : "models/BG2.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "BG2",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 108,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"repeat" : "1 1",
-								"speedx" : 0.17499999999999999,
-								"speedy" : 0
-							},
-							"id" : 109
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 42,
-			"image" : "models/BG12.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "BG12",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n/** Length of the day in minutes. */\nlet day_length = 5;\nlet activeBG = undefined;\n\nlet prevSunHeight = 0;\n\nfunction lerp(a, b, t) {\n\treturn a + (b-a)*t;\n}\n\n/**\n * Returns a number between 1-12, where 1 means the sun is completely down, and 12 means it is day time.\n */\nfunction getSunHeight() {\n\tlet timeOfDay = ((engine.timeOfDay * 1440) % day_length) / day_length;\n\tlet hour = Math.abs((timeOfDay - 0.5) * 24);\n\tif (hour < 6.5)\n\t\treturn 12;\n\telse if (hour > 7.5)\n\t\treturn 1;\n\telse\n\t\treturn Math.floor(lerp(12, 1, hour - 6.5));\n}\n\n\n\nexport function init() {\n\tactiveBG = thisLayer;\n\tconsole.log(`initial activeBG: ${activeBG.name}`)\n}\n\n\n\nexport function update() {\n\tlet sunHeight = getSunHeight();\n\tif (sunHeight != prevSunHeight)\n\t{\n\t\tconsole.log(`old activeBG: ${activeBG.name}`);\n\t\tactiveBG.visible = false;\n\n\t\tif (sunHeight == 1)\n\t\t\tactiveBG = thisLayer;\n\t\telse {\n\t\t\tactiveBG = thisScene.getLayer(`BG${sunHeight}`) || thisScene.createLayer({\n\t\t\t\tname: `BG${sunHeight}`,\n\t\t\t\timage: `models/BG${sunHeight}.json`,\n\t\t\t\torigin: `256 128 0`,\n\t\t\t\tsize: `512.000 256.000`,\n\t\t\t\teffects: \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\t\t\"name\" : \"\",\n\t\t\t\t\t\t\"passes\" : \n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"repeat\" : \"1 1\",\n\t\t\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"user\" : \"bg_speed\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 0.40000000596046448\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"visible\" : true\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\t\t\"name\" : \"\",\n\t\t\t\t\t\t\"passes\" : \n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"Scale\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tconsole.log(Object.keys(thisObject));\\n\\t// console.log(`scale before: ${thisObject.scale}`);\\n\\t// if (userProperties.perspective !== undefined)\\n\\t// \\tthisObject.scale = userProperties.perspective;\\n\\t// console.log(`scale after: ${thisObject.scale}`);\\n}\\n\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 1.0;\\n}\\n\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"textures\" : [ null, \"BGDepth\" ]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t});\n\t\t\tthisScene.sortLayer(activeBG, thisScene.getLayerIndex(thisLayer) + 1);\n\t\t}\n\n\t\tactiveBG.visible = true;\n\n\t\tconsole.log(`layer count: ${thisScene.getLayerCount()}`);\n\t}\n\tprevSunHeight = sunHeight;\n}\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.day_length != undefined)\n\t\tday_length = userProperties.day_length;\n}",
+				"value" : true
+			}
 		},
 		{
 			"alignment" : "center",
@@ -317,22 +260,6 @@
 						}
 					],
 					"visible" : true
-				},
-				{
-					"file" : "effects/perspective/effect.json",
-					"id" : 464,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"top" : 0.050000000000000003
-							},
-							"id" : 465
-						}
-					],
-					"visible" : false
 				}
 			],
 			"id" : 709,
@@ -592,6 +519,26 @@
 			"size" : "40.000 36.000",
 			"solid" : true,
 			"visible" : false
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 236,
+			"image" : "models/MMX1ArmorRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX1ArmorRun",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
 		},
 		{
 			"alignment" : "center",

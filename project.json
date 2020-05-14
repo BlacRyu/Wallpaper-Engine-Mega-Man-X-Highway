@@ -1,4 +1,5 @@
 {
+	"approved" : true,
 	"contentrating" : "Everyone",
 	"description" : "Mega Man X running along the highway.\n\nIn the future I plan to add a time of day system, and the ability to swap out various armor upgrades for X.\n\n\n\ntags: mega man megaman X video game SNES CRT retro pixel art city night lights time of day cyberpunk future robot cyborg",
 	"file" : "scene.json",
@@ -12,7 +13,7 @@
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 107,
+				"order" : 108,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "BG Speed",
@@ -31,13 +32,25 @@
 				"type" : "slider",
 				"value" : 0.66000000000000003
 			},
+			"day_length" : 
+			{
+				"fraction" : true,
+				"max" : 1440,
+				"min" : 0,
+				"order" : 105,
+				"precision" : 2,
+				"step" : 0.10000000000000001,
+				"text" : "Day Length (minutes)",
+				"type" : "slider",
+				"value" : 0.5
+			},
 			"fg_speed" : 
 			{
 				"condition" : "false",
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 106,
+				"order" : 107,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "FG Speed",
@@ -54,7 +67,7 @@
 			"low_precision_pixels" : 
 			{
 				"condition" : "false",
-				"order" : 108,
+				"order" : 109,
 				"text" : "Low precision pixels",
 				"type" : "bool",
 				"value" : false
@@ -71,6 +84,28 @@
 				"text" : "Mega Man's Screen Position",
 				"type" : "slider",
 				"value" : 0.5
+			},
+			"music" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "None",
+						"value" : "None"
+					},
+					{
+						"label" : "Intro Stage",
+						"value" : "Intro Stage"
+					},
+					{
+						"label" : "Credits",
+						"value" : "Credits"
+					}
+				],
+				"order" : 110,
+				"text" : "Music",
+				"type" : "combo",
+				"value" : "None"
 			},
 			"perspective" : 
 			{
@@ -101,7 +136,7 @@
 			"vvv_dev_only_properties_vvv" : 
 			{
 				"condition" : "false",
-				"order" : 105,
+				"order" : 106,
 				"text" : "vv Dev Only Properties vv",
 				"type" : "textinput",
 				"value" : ""
@@ -111,7 +146,7 @@
 	"preview" : "preview.gif",
 	"tags" : [ "Game" ],
 	"title" : "Mega Man X - Endless Highway",
-	"type" : "Scene",
+	"type" : "scene",
 	"version" : 2,
 	"visibility" : "public",
 	"workshopid" : "2091399391"
