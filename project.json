@@ -9,11 +9,11 @@
 		{
 			"bg_speed" : 
 			{
-				"condition" : "false",
+				"condition" : "vvv_dev_only_properties_vvv.value === true",
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 108,
+				"order" : 110,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "BG Speed",
@@ -25,32 +25,50 @@
 				"fraction" : true,
 				"max" : 1,
 				"min" : 0,
-				"order" : 102,
+				"order" : 105,
 				"precision" : 2,
 				"step" : 0.01,
-				"text" : "CRT Effect",
+				"text" : "CRT Amount",
 				"type" : "slider",
-				"value" : 0.66000000000000003
+				"value" : 0.67000000000000004
+			},
+			"crt_type" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "v1",
+						"value" : "v1"
+					},
+					{
+						"label" : "v2",
+						"value" : "v2"
+					}
+				],
+				"order" : 104,
+				"text" : "CRT Type",
+				"type" : "combo",
+				"value" : "v1"
 			},
 			"day_length" : 
 			{
 				"fraction" : true,
-				"max" : 1440,
-				"min" : 0,
-				"order" : 105,
+				"max" : 60,
+				"min" : 0.5,
+				"order" : 101,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "Day Length (minutes)",
 				"type" : "slider",
-				"value" : 0.5
+				"value" : 2
 			},
 			"fg_speed" : 
 			{
-				"condition" : "false",
+				"condition" : "vvv_dev_only_properties_vvv.value === true",
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 107,
+				"order" : 109,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "FG Speed",
@@ -59,15 +77,15 @@
 			},
 			"foreground_lamps" : 
 			{
-				"order" : 104,
+				"order" : 107,
 				"text" : "Show Foreground Lamps",
 				"type" : "bool",
 				"value" : true
 			},
 			"low_precision_pixels" : 
 			{
-				"condition" : "false",
-				"order" : 109,
+				"condition" : "vvv_dev_only_properties_vvv.value === true",
+				"order" : 111,
 				"text" : "Low precision pixels",
 				"type" : "bool",
 				"value" : false
@@ -78,7 +96,7 @@
 				"fraction" : true,
 				"max" : 0.94999999999999996,
 				"min" : 0.050000000000000003,
-				"order" : 101,
+				"order" : 103,
 				"precision" : 2,
 				"step" : 0.01,
 				"text" : "Mega Man's Screen Position",
@@ -87,6 +105,7 @@
 			},
 			"music" : 
 			{
+				"condition" : "false",
 				"options" : 
 				[
 					{
@@ -102,7 +121,7 @@
 						"value" : "Credits"
 					}
 				],
-				"order" : 110,
+				"order" : 100,
 				"text" : "Music",
 				"type" : "combo",
 				"value" : "None"
@@ -112,7 +131,7 @@
 				"fraction" : true,
 				"max" : 1.5,
 				"min" : 0,
-				"order" : 103,
+				"order" : 106,
 				"precision" : 2,
 				"step" : 0.01,
 				"text" : "Scene Depth",
@@ -128,7 +147,7 @@
 			},
 			"show_megaman" : 
 			{
-				"order" : 100,
+				"order" : 102,
 				"text" : "Show Mega Man",
 				"type" : "bool",
 				"value" : true
@@ -136,10 +155,10 @@
 			"vvv_dev_only_properties_vvv" : 
 			{
 				"condition" : "false",
-				"order" : 106,
+				"order" : 108,
 				"text" : "vv Dev Only Properties vv",
-				"type" : "textinput",
-				"value" : ""
+				"type" : "bool",
+				"value" : false
 			}
 		}
 	},

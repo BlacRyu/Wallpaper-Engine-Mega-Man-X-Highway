@@ -21,7 +21,7 @@
 		"camerashakeamplitude" : 0.5,
 		"camerashakeroughness" : 1.0,
 		"camerashakespeed" : 3.0,
-		"clearcolor" : "0.700 0.700 0.700",
+		"clearcolor" : "0.529 0.529 0.529",
 		"clearenabled" : true,
 		"farz" : 10000.0,
 		"fov" : 50.0,
@@ -42,59 +42,8 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 173,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"repeat" : "1 1",
-								"speedx" : 
-								{
-									"user" : "bg_speed",
-									"value" : 0.40000000596046448
-								},
-								"speedy" : 0
-							},
-							"id" : 174
-						}
-					],
-					"visible" : true
-				},
-				{
-					"file" : "effects/Perspective_Mask/effect.json",
-					"id" : 475,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"Scale" : 
-								{
-									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tconsole.log(Object.keys(thisObject));\n\t// console.log(`scale before: ${thisObject.scale}`);\n\t// if (userProperties.perspective !== undefined)\n\t// \tthisObject.scale = userProperties.perspective;\n\t// console.log(`scale after: ${thisObject.scale}`);\n}\n",
-									"value" : 1
-								},
-								"scale" : 
-								{
-									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.perspective !== undefined)\n\t\tthisObject.scale = userProperties.perspective * 1.0;\n}\n",
-									"value" : 1
-								}
-							},
-							"id" : 476,
-							"textures" : [ null, "BGDepth" ]
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 33,
-			"image" : "models/BG1.json",
+			"id" : 223,
+			"image" : "models/util/solidlayer.json",
 			"ledsource" : false,
 			"locktransforms" : false,
 			"name" : "Time of Day script",
@@ -102,178 +51,13 @@
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
 			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
+			"size" : "0.000 0.000",
 			"solid" : true,
 			"visible" : 
 			{
-				"script" : "'use strict';\n\n/** Length of the day in minutes. */\nlet day_length = 5;\nlet activeBG = undefined;\n\nlet prevSunHeight = 0;\n\nfunction lerp(a, b, t) {\n\treturn a + (b-a)*t;\n}\n\n/**\n * Returns a number between 1-12, where 1 means the sun is completely down, and 12 means it is day time.\n */\nfunction getSunHeight() {\n\tlet timeOfDay = ((engine.timeOfDay * 1440) % day_length) / day_length;\n\tlet hour = Math.abs((timeOfDay - 0.5) * 24);\n\tif (hour < 6.5)\n\t\treturn 12;\n\telse if (hour > 7.5)\n\t\treturn 1;\n\telse\n\t\treturn Math.floor(lerp(12, 1, hour - 6.5));\n}\n\n\n\nexport function init() {\n\tactiveBG = thisLayer;\n\tconsole.log(`initial activeBG: ${activeBG.name}`)\n}\n\n\n\nexport function update() {\n\tlet sunHeight = getSunHeight();\n\tif (sunHeight != prevSunHeight)\n\t{\n\t\tconsole.log(`old activeBG: ${activeBG.name}`);\n\t\tactiveBG.visible = false;\n\n\t\tif (sunHeight == 1)\n\t\t\tactiveBG = thisLayer;\n\t\telse {\n\t\t\tactiveBG = thisScene.getLayer(`BG${sunHeight}`) || thisScene.createLayer({\n\t\t\t\tname: `BG${sunHeight}`,\n\t\t\t\timage: `models/BG${sunHeight}.json`,\n\t\t\t\torigin: `256 128 0`,\n\t\t\t\tsize: `512.000 256.000`,\n\t\t\t\teffects: \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\t\t\"name\" : \"\",\n\t\t\t\t\t\t\"passes\" : \n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"repeat\" : \"1 1\",\n\t\t\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"user\" : \"bg_speed\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 0.40000000596046448\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"visible\" : true\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\t\t\"name\" : \"\",\n\t\t\t\t\t\t\"passes\" : \n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"Scale\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tconsole.log(Object.keys(thisObject));\\n\\t// console.log(`scale before: ${thisObject.scale}`);\\n\\t// if (userProperties.perspective !== undefined)\\n\\t// \\tthisObject.scale = userProperties.perspective;\\n\\t// console.log(`scale after: ${thisObject.scale}`);\\n}\\n\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 1.0;\\n}\\n\",\n\t\t\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"textures\" : [ null, \"BGDepth\" ]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t});\n\t\t\tthisScene.sortLayer(activeBG, thisScene.getLayerIndex(thisLayer) + 1);\n\t\t}\n\n\t\tactiveBG.visible = true;\n\n\t\tconsole.log(`layer count: ${thisScene.getLayerCount()}`);\n\t}\n\tprevSunHeight = sunHeight;\n}\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.day_length != undefined)\n\t\tday_length = userProperties.day_length;\n}",
-				"value" : true
+				"script" : "'use strict';\n\n/** Length of the day in minutes. */\nlet day_length = 5;\n/** The currently visible background layer .*/\nlet activeBG = undefined;\n/** The currently visible foreground layer. */\nlet activeFG = undefined;\n/** The currently visible foreground lamps layer. */\nlet activeLamps = undefined;\n/** The 'sun height' (1-12) value from the previous frame. */\nlet prevSunHeight = 0;\n\n/** Register assets for publishing */\nfor (let i = 1; i <= 12; ++i) {\n\tengine.registerAsset(`models/BG${i}.json`);\n\tengine.registerAsset(`models/FG${i}.json`);\n\tengine.registerAsset(`models/FGLamps${i}.json`);\n}\n\n/** Linearly interpolates between two values based on the third value */\nfunction lerp(a, b, t) { return a + (b-a)*t; }\n\n\n\n\nexport function init() {\n\t// Precache background and foreground layers\n\tfor (let i = 1; i <= 12; ++i) {\n\t\tloadBG(i).visible = false;\n\t\tloadFG(i).visible = false;\n\t\tloadLamps(i).visible = false;\n\t}\n}\n\n\n\nexport function update() {\n\tlet sunHeight = getSunHeight();\n\tif (sunHeight != prevSunHeight)\n\t{\n\t\tif (activeBG)\n\t\t\tactiveBG.visible = false;\n\t\tif (activeFG)\n\t\t\tactiveFG.visible = false;\n\t\tif (activeLamps)\n\t\t\tactiveLamps.visible = false;\n\n\t\tactiveBG = thisScene.getLayer(`BG${sunHeight}`) || loadBG(sunHeight);\n\t\tthisScene.sortLayer(activeBG, thisScene.getLayerIndex(thisLayer) + 1);\n\n\t\tactiveFG = thisScene.getLayer(`FG${sunHeight}`) || loadFG(sunHeight);\n\t\tthisScene.sortLayer(activeFG, thisScene.getLayerIndex(activeBG) + 1);\n\n\t\tactiveLamps = thisScene.getLayer(`FGLamps${sunHeight}`) || loadLamps(sunHeight);\n\t\tthisScene.sortLayer(activeLamps, thisScene.getLayerIndex(\"Pixel step (512x256 White)\") - 1);\n\n\t\tactiveBG.visible = true;\n\t\tactiveFG.visible = true;\n\t\tactiveLamps.visible = true;\n\t}\n\t\n\tprevSunHeight = sunHeight;\n}\n\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.day_length != undefined)\n\t\tday_length = userProperties.day_length;\n}\n\n\n\n/**\n * Returns a number between 1-12, where 1 means the sun is completely down, and 12 means it is day time.\n */\nfunction getSunHeight() {\n\tlet timeOfDay = ((engine.timeOfDay * 1440) % day_length) / day_length;\n\tlet hour = Math.abs((timeOfDay - 0.5) * 24);\n\tif (hour < 6)\n\t\treturn 12;\n\telse if (hour > 8)\n\t\treturn 1;\n\telse\n\t\treturn Math.floor(lerp(12, 1, (hour - 6) * 0.5));\n}\n\n\n\nfunction loadBG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `BG${sunHeight}`,\n\t\timage: `models/BG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"bg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"visible\" : true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"name\" : \"\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 1.0;\\n}\\n\",\n\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"BGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadFG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FG${sunHeight}`,\n\t\timage: `models/FG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 3.0;\\n}\\n\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"FGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadLamps(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FGLamps${sunHeight}`,\n\t\timage: `models/FGLamps${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"repeat\" : \"1 1\",\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}",
+				"value" : false
 			}
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 176,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"speedx" : 
-								{
-									"user" : "fg_speed",
-									"value" : 0.40000000596046448
-								},
-								"speedy" : 0
-							},
-							"id" : 177
-						}
-					],
-					"visible" : true
-				},
-				{
-					"file" : "effects/Perspective_Mask/effect.json",
-					"id" : 266,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"MODE" : 0,
-								"REPEAT" : 0,
-								"REPEATX" : 1,
-								"REPEATY" : 0
-							},
-							"constantshadervalues" : 
-							{
-								"Mask Scroll X" : 0.40000000000000002,
-								"Mask scroll speed" : "0.16 0",
-								"Scale" : 3,
-								"bottom" : 0.29999999999999999,
-								"left" : 0.29999999999999999,
-								"right" : 0.29999999999999999,
-								"scale" : 
-								{
-									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.perspective !== undefined)\n\t\tthisObject.scale = userProperties.perspective * 3.0;\n}\n",
-									"value" : 1
-								},
-								"speedx" : 0.40000000000000002,
-								"speedy" : 0,
-								"top" : 0.29999999999999999
-							},
-							"id" : 267,
-							"textures" : [ null, "FGDepth" ]
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 52,
-			"image" : "models/FG1.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "FG1",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : true
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"id" : 56,
-			"image" : "models/FG2.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "FG2",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"id" : 60,
-			"image" : "models/FG3.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "FG3",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 467,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"speedx" : 
-								{
-									"user" : "fg_speed",
-									"value" : 0.375
-								},
-								"speedy" : 0
-							},
-							"id" : 468
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 709,
-			"image" : "models/FG12.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "FG12",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
 		},
 		{
 			"alignment" : "center",
@@ -291,147 +75,6 @@
 			"ledsource" : false,
 			"locktransforms" : false,
 			"name" : "BG Container (Composition)",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"config" : 
-			{
-				"passthrough" : true
-			},
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/blend/effect.json",
-					"id" : 361,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"BLENDMODE" : 0,
-								"WRITEALPHA" : 0
-							},
-							"id" : 363,
-							"textures" : [ null, "util/white" ]
-						}
-					],
-					"visible" : true
-				},
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 392,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"repeat" : "1 1",
-								"speedx" : 
-								{
-									"user" : "fg_speed",
-									"value" : 0.20000000298023224
-								},
-								"speedy" : 0
-							},
-							"id" : 393
-						}
-					],
-					"visible" : true
-				},
-				{
-					"file" : "effects/Perspective_Mask/effect.json",
-					"id" : 402,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"Scale" : 3
-							},
-							"id" : 403,
-							"textures" : [ null, "FGDepth" ]
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 359,
-			"image" : "models/util/composelayer.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "Background Scroll + Perspective",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : false
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/blend/effect.json",
-					"id" : 593,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"id" : 594,
-							"textures" : [ null, "util/white" ]
-						}
-					],
-					"visible" : true
-				},
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 604,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"speedx" : 
-								{
-									"user" : "fg_speed",
-									"value" : 0.375
-								},
-								"speedy" : 0
-							},
-							"id" : 605
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 589,
-			"image" : "models/512x256 White.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "Background Capture + Scroll (512x256 White) (Unused)",
 			"origin" : "256.000 128.000 0.000",
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
@@ -660,54 +303,6 @@
 			"angles" : "0.000 0.000 0.000",
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
-			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/scroll/effect.json",
-					"id" : 408,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"speedx" : 
-								{
-									"user" : "fg_speed",
-									"value" : 0.20000000298023224
-								},
-								"speedy" : 0
-							},
-							"id" : 409
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 327,
-			"image" : "models/FGLamps1.json",
-			"ledsource" : false,
-			"locktransforms" : false,
-			"name" : "FGLamps1",
-			"origin" : "256.000 128.000 0.000",
-			"parallaxDepth" : "1.000 1.000",
-			"perspective" : false,
-			"scale" : "1.000 1.000 1.000",
-			"size" : "512.000 256.000",
-			"solid" : true,
-			"visible" : 
-			{
-				"user" : "foreground_lamps",
-				"value" : true
-			}
-		},
-		{
-			"alignment" : "center",
-			"alpha" : 1.0,
-			"angles" : "0.000 0.000 0.000",
-			"color" : "1.000 1.000 1.000",
-			"colorBlendMode" : 0,
 			"config" : 
 			{
 				"passthrough" : true
@@ -815,7 +410,7 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
-			"dependencies" : [ 362, 362, 362 ],
+			"dependencies" : [ 362, 362 ],
 			"effects" : 
 			[
 				{
@@ -827,10 +422,12 @@
 						{
 							"combos" : 
 							{
-								"BLENDMODE" : 11
+								"BLENDMODE" : 11,
+								"WRITEALPHA" : 0
 							},
 							"constantshadervalues" : 
 							{
+								"center" : "0 0",
 								"multiply" : 
 								{
 									"user" : "crt_effect",
@@ -838,7 +435,8 @@
 								},
 								"scale" : 
 								{
-									"script" : "'use strict';\n\n/**\n * @param {Vec2} value (for property 'scale')\n */\nexport function init(value) {\n\treturn engine.screenResolution.multiply(0.2);\n}\n\n/**\n * @param {Vec2} size\n */\nexport function resizeScreen(size) {\n\tthisObject.scale = size.multiply(0.2);\n}\n",
+									"script" : "'use strict';\n\nlet scale = 0.2;\n\n/**\n * @param {Vec2} value (for property 'scale')\n */\nexport function init(value) {\n\treturn engine.screenResolution.multiply(scale);\n}\n\n/**\n * @param {Vec2} size\n */\nexport function resizeScreen(size) {\n\tthisObject.scale = size.multiply(scale);\n}\n",
+									"user" : null,
 									"value" : "512 256"
 								}
 							},
@@ -898,27 +496,26 @@
 								"compositeoffset" : "0 0"
 							},
 							"id" : 401,
-							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_b" ]
 						}
 					],
 					"visible" : true
 				},
 				{
 					"file" : "effects/blur/effect.json",
-					"id" : 127,
-					"name" : "CRT Glow Linear Dodge",
+					"id" : 625,
+					"name" : "",
 					"passes" : 
 					[
+						{
+							"id" : 626
+						},
 						{
 							"combos" : 
 							{
 								"KERNEL" : 2
 							},
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 128
+							"id" : 627
 						},
 						{
 							"combos" : 
@@ -926,46 +523,28 @@
 								"KERNEL" : 2,
 								"VERTICAL" : 1
 							},
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 129
+							"id" : 628
 						},
 						{
 							"combos" : 
 							{
-								"BLENDMODE" : 9,
-								"COMPOSITE" : 1,
-								"COMPOSITEMONO" : 0,
-								"KERNEL" : 2,
-								"VERTICAL" : 1
-							},
-							"constantshadervalues" : 
-							{
-								"compositealpha" : 0.5,
-								"compositecolor" : "1 1 1",
-								"compositeoffset" : "0 0"
-							},
-							"id" : 130,
-							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
-						},
-						{
-							"combos" : 
-							{
-								"BLENDMODE" : 9,
+								"BLENDMODE" : 6,
 								"COMPOSITE" : 1
 							},
 							"constantshadervalues" : 
 							{
-								"compositealpha" : 0.34999999999999998,
+								"compositealpha" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.compositealpha = userProperties.crt_effect * 0.15;\n}\n",
+									"value" : 0.14999999999999999
+								},
 								"compositeoffset" : "0 0"
 							},
-							"id" : 131,
-							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_b" ]
+							"id" : 629,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
 						}
 					],
-					"visible" : false
+					"visible" : true
 				},
 				{
 					"file" : "effects/blend/effect.json",
@@ -1083,14 +662,289 @@
 			"image" : "models/util/fullscreenlayer.json",
 			"ledsource" : false,
 			"locktransforms" : false,
-			"name" : "CRT (Fullscreen)",
+			"name" : "CRT v1 (Fullscreen)",
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
 			"solid" : true,
 			"visible" : 
 			{
-				"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.visible = userProperties.crt_effect > 0.001;\n}\n",
+				"script" : "// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.visible = userProperties.crt_effect > 0.001;\n// }\n",
+				"user" : 
+				{
+					"condition" : "v1",
+					"name" : "crt_type"
+				},
 				"value" : true
+			}
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"dependencies" : [ 207, 207 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend_scaled/effect.json",
+					"id" : 212,
+					"name" : "Screen Pixels",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 2,
+								"WRITEALPHA" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"center" : "0 0",
+								"multiply" : 
+								{
+									"user" : "crt_effect",
+									"value" : 1
+								},
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n// let scale = new Vec2(0.125, 0.125);\n\nlet scale = new Vec2(0.0833333333333333, 0.125);\n\n/**\n * @param {Vec2} value (for property 'scale')\n */\nexport function init(value) {\n\treturn engine.screenResolution.multiply(scale);\n}\n\n/**\n * @param {Vec2} size\n */\nexport function resizeScreen(size) {\n\tthisObject.scale = size.multiply(scale);\n}\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \t// if (userProperties.horizontal_pixel_scale !== undefined)\n// \t// \tscale = new Vec2(userProperties.horizontal_pixel_scale, scale.y);\n// \tif (userProperties.vertical_pixel_scale !== undefined)\n// \t\tscale = new Vec2(scale.x, userProperties.vertical_pixel_scale);\n// \tthisObject.scale = engine.screenResolution.multiply(scale);\n// }\n",
+									"value" : "512 256"
+								}
+							},
+							"id" : 214,
+							"textures" : [ null, "rgb_pixel" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 332,
+					"name" : "CRT Glow (Linear Dodge)",
+					"passes" : 
+					[
+						{
+							"id" : 335
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 337
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2,
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 338
+						},
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 9,
+								"COMPOSITE" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"compositealpha" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.compositealpha = Math.pow(userProperties.crt_effect,2.5) * 3.25;\n}\n",
+									"value" : 3
+								},
+								"compositeoffset" : "0 0"
+							},
+							"id" : 340,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_207_b" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 368,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"id" : 369
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2
+							},
+							"id" : 373
+						},
+						{
+							"combos" : 
+							{
+								"KERNEL" : 2,
+								"VERTICAL" : 1
+							},
+							"id" : 376
+						},
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 6,
+								"COMPOSITE" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"compositealpha" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.compositealpha = userProperties.crt_effect * 0.2;\n}\n",
+									"value" : 0.20000000298023224
+								},
+								"compositeoffset" : "0 0"
+							},
+							"id" : 378,
+							"textures" : [ null, "util/white", "_rt_imageLayerComposite_207_a" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 257,
+					"name" : "Vignette (Blend)",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 2,
+								"WRITEALPHA" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.multiply = userProperties.crt_effect * 0.5;\n}\n",
+									"value" : 0.5
+								}
+							},
+							"id" : 258,
+							"textures" : [ null, "Vignette" ]
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/transform/effect.json",
+					"id" : 268,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"CLAMP" : 1,
+								"MODE" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"angle" : 0,
+								"offset" : "0 0",
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(1.0 + userProperties.crt_effect * .05);\n}\n",
+									"value" : "1.05 1.05"
+								}
+							},
+							"id" : 272
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/fisheye/effect.json",
+					"id" : 282,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BACKGROUND" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"center" : "0.5 0.5",
+								"distortion" : 
+								{
+									"script" : "// Fisheye - Distortion\n'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.distortion = userProperties.crt_effect * .3;\n}\n",
+									"value" : 0.30000001192092896
+								},
+								"size" : 
+								{
+									"script" : "// // Fisheye - Size\n// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.size = 1.0 + userProperties.crt_effect * .5;\n// }\n",
+									"value" : 1.5
+								}
+							},
+							"id" : 283
+						}
+					],
+					"visible" : true
+				},
+				{
+					"file" : "effects/blend_scaled/effect.json",
+					"id" : 294,
+					"name" : "CRT Screen Border",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0,
+								"WRITEALPHA" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"center" : "0.5 0.5",
+								"multiply" : 1.0,
+								"scale" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(\n\t\t\t0.75 + userProperties.crt_effect * .225,\n\t\t\t0.7 + userProperties.crt_effect * .25\n\t\t);\n}\n",
+									"value" : "1 1"
+								}
+							},
+							"id" : 296,
+							"textures" : [ null, "CRT Border" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 207,
+			"image" : "models/util/fullscreenlayer.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "CRT v2 (Fullscreen)",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"solid" : true,
+			"visible" : 
+			{
+				"script" : "// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.visible = userProperties.crt_effect > 0.001;\n// }\n",
+				"user" : 
+				{
+					"condition" : "v2",
+					"name" : "crt_type"
+				},
+				"value" : false
 			}
 		}
 	]

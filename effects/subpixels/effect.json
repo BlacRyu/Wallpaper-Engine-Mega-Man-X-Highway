@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/subpixels.json",
+		"shaders/effects/subpixels.frag",
+		"shaders/effects/subpixels.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Subpixels",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/subpixels.json"
+		}
+	],
+	"replacementkey" : "subpixels",
+	"version" : 1
+}
