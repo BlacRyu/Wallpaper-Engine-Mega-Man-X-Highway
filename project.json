@@ -13,7 +13,7 @@
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 110,
+				"order" : 111,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "BG Speed",
@@ -25,7 +25,7 @@
 				"fraction" : true,
 				"max" : 1,
 				"min" : 0,
-				"order" : 105,
+				"order" : 106,
 				"precision" : 2,
 				"step" : 0.01,
 				"text" : "CRT Amount",
@@ -45,17 +45,18 @@
 						"value" : "v2"
 					}
 				],
-				"order" : 104,
+				"order" : 105,
 				"text" : "CRT Type",
 				"type" : "combo",
 				"value" : "v1"
 			},
 			"day_length" : 
 			{
+				"condition" : "time_of_day.value == 'enabled'",
 				"fraction" : true,
 				"max" : 60,
 				"min" : 0.5,
-				"order" : 101,
+				"order" : 102,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "Day Length (minutes)",
@@ -68,7 +69,7 @@
 				"fraction" : true,
 				"max" : 1,
 				"min" : -1,
-				"order" : 109,
+				"order" : 110,
 				"precision" : 2,
 				"step" : 0.10000000000000001,
 				"text" : "FG Speed",
@@ -77,7 +78,7 @@
 			},
 			"foreground_lamps" : 
 			{
-				"order" : 107,
+				"order" : 108,
 				"text" : "Show Foreground Lamps",
 				"type" : "bool",
 				"value" : true
@@ -85,7 +86,7 @@
 			"low_precision_pixels" : 
 			{
 				"condition" : "vvv_dev_only_properties_vvv.value === true",
-				"order" : 111,
+				"order" : 112,
 				"text" : "Low precision pixels",
 				"type" : "bool",
 				"value" : false
@@ -96,7 +97,7 @@
 				"fraction" : true,
 				"max" : 0.94999999999999996,
 				"min" : 0.050000000000000003,
-				"order" : 103,
+				"order" : 104,
 				"precision" : 2,
 				"step" : 0.01,
 				"text" : "Mega Man's Screen Position",
@@ -131,7 +132,7 @@
 				"fraction" : true,
 				"max" : 1.5,
 				"min" : 0,
-				"order" : 106,
+				"order" : 107,
 				"precision" : 2,
 				"step" : 0.01,
 				"text" : "Scene Depth",
@@ -147,15 +148,37 @@
 			},
 			"show_megaman" : 
 			{
-				"order" : 102,
+				"order" : 103,
 				"text" : "Show Mega Man",
 				"type" : "bool",
 				"value" : true
 			},
+			"time_of_day" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "Enabled",
+						"value" : "enabled"
+					},
+					{
+						"label" : "Disabled",
+						"value" : "disabled"
+					},
+					{
+						"label" : "Local time",
+						"value" : "localTime"
+					}
+				],
+				"order" : 101,
+				"text" : "Time of Day",
+				"type" : "combo",
+				"value" : "enabled"
+			},
 			"vvv_dev_only_properties_vvv" : 
 			{
 				"condition" : "false",
-				"order" : 108,
+				"order" : 109,
 				"text" : "vv Dev Only Properties vv",
 				"type" : "bool",
 				"value" : false

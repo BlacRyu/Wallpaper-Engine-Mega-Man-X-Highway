@@ -1,3 +1,11 @@
+Bugs:
+	- Adding another effect after an X-Ray causes the X-Ray's mouse coordinates to be inaccurate.
+	- Changing the blend mode of a layer that has an X-Ray causes the X-Ray's mouse coordinates to be inaccurate.
+	- Adding an effect to a spritesheet image layer causes the spritesheets UV coordinates to be inaccurate.
+	- Changing the blend mode of a spritesheet image layer causes the spritesheets UV coordinates to be inaccurate.
+
+
+
 
 
 ToDo:
