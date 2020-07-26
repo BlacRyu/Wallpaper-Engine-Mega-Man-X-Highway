@@ -11,7 +11,7 @@ Bugs:
 ToDo:
 	- Time of Day Options
 	  - Default
-	  	- Cycles through day and night every X (0.5-60) minutes
+	  	- Cycles through day and night every X (0.5-20) minutes
 	  - Fixed
 	    - Allows the user to manually select the time of day (1-12)
 	  - Local Clock
@@ -23,6 +23,11 @@ ToDo:
 
 
 
+
+Advanced Audio Bars:
+	- How do we fade at a constant rate with variable framerates?
+		- We don't for now... just have a slider to adjust the rate. 
+			- Need one of the features detailed here: https://steamcommunity.com/app/431960/discussions/2/2261313417709293714/?ctp=4#c2245552086098051722
 
 
 

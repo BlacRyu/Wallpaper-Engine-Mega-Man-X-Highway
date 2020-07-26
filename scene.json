@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "0.000 0.000 -1.000",
-		"eye" : "0.000 0.000 0.000",
+		"center" : "0.000 0.000 0.000",
+		"eye" : "0.000 0.000 1.000",
 		"up" : "0.000 1.000 0.000"
 	},
 	"general" : 
@@ -36,6 +36,22 @@
 	"objects" : 
 	[
 		{
+			"angles" : "0.000 0.000 0.000",
+			"id" : 319,
+			"locktransforms" : true,
+			"maxtime" : 5.0,
+			"mintime" : 1.0,
+			"muteineditor" : false,
+			"name" : "Enable Volume Controls",
+			"origin" : "0.000 0.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"playbackmode" : "single",
+			"scale" : "1.000 1.000 1.000",
+			"sound" : [],
+			"startsilent" : true,
+			"volume" : 0.0
+		},
+		{
 			"alignment" : "center",
 			"alpha" : 1.0,
 			"angles" : "0.000 0.000 0.000",
@@ -45,7 +61,7 @@
 			"id" : 223,
 			"image" : "models/util/solidlayer.json",
 			"ledsource" : false,
-			"locktransforms" : false,
+			"locktransforms" : true,
 			"name" : "Time of Day script",
 			"origin" : "256.000 128.000 0.000",
 			"parallaxDepth" : "1.000 1.000",
@@ -55,7 +71,31 @@
 			"solid" : true,
 			"visible" : 
 			{
-				"script" : "'use strict';\n\nconst SECONDS_TO_MINUTES = 1 / 60;\n\n/** Length of the day in minutes. */\nlet day_length = 5;\n/** The currently visible background layer .*/\nlet activeBG = undefined;\n/** The currently visible foreground layer. */\nlet activeFG = undefined;\n/** The currently visible foreground lamps layer. */\nlet activeLamps = undefined;\n/** The 'sun height' (1-12) value from the previous frame. */\nlet prevSunHeight = 0;\n\n// How the wallpaper should calculate the current time of day.\nconst TOD = {\n\tENABLED   : 0,\n\tDISABLED  : 1,\n\tLOCALTIME : 2\n}; Object.freeze(TOD);\nlet timeOfDayMode = TOD.ENABLED;\n\nlet timeOfDay = 0;\n\n/** Register assets for publishing */\nfor (let i = 1; i <= 12; ++i) {\n\tengine.registerAsset(`models/BG${i}.json`);\n\tengine.registerAsset(`models/FG${i}.json`);\n\tengine.registerAsset(`models/FGLamps${i}.json`);\n}\n\n/** Linearly interpolates between two values based on the third value */\nfunction lerp(a, b, t) { return a + (b-a)*t; }\n\n\n\n\nexport function init() {\n\t// Precache background and foreground layers\n\tfor (let i = 1; i <= 12; ++i) {\n\t\tloadBG(i).visible = false;\n\t\tloadFG(i).visible = false;\n\t\tloadLamps(i).visible = false;\n\t}\n}\n\n\n\nexport function update() {\n\tlet sunHeight = getSunHeight();\n\tif (sunHeight != prevSunHeight)\n\t{\n\t\tif (activeBG)\n\t\t\tactiveBG.visible = false;\n\t\tif (activeFG)\n\t\t\tactiveFG.visible = false;\n\t\tif (activeLamps)\n\t\t\tactiveLamps.visible = false;\n\n\t\tactiveBG = thisScene.getLayer(`BG${sunHeight}`) || loadBG(sunHeight);\n\t\tthisScene.sortLayer(activeBG, thisScene.getLayerIndex(thisLayer) + 1);\n\n\t\tactiveFG = thisScene.getLayer(`FG${sunHeight}`) || loadFG(sunHeight);\n\t\tthisScene.sortLayer(activeFG, thisScene.getLayerIndex(activeBG) + 1);\n\n\t\tactiveLamps = thisScene.getLayer(`FGLamps${sunHeight}`) || loadLamps(sunHeight);\n\t\tthisScene.sortLayer(activeLamps, thisScene.getLayerIndex(\"Pixel step (512x256 White) (Unused)\") - 1);\n\n\t\tactiveBG.visible = true;\n\t\tactiveFG.visible = true;\n\t\tactiveLamps.visible = true;\n\t}\n\t\n\tprevSunHeight = sunHeight;\n}\n\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.day_length != undefined)\n\t\tday_length = userProperties.day_length;\n\tif (userProperties.time_of_day != undefined)\n\t\ttimeOfDayMode = userProperties.time_of_day;wd\n}\n\n\n\n/**\n * Returns a number between 1-12, where 1 means the sun is completely down, and 12 means it is day time.\n */\nfunction getSunHeight() {\n\tswitch (timeOfDayMode) {\n\tcase TOD.ENABLED:\n\tdefault:\n\t\ttimeOfDay += engine.frametime * SECONDS_TO_MINUTES / day_length;\n\t\ttimeOfDay %= 1;\n\t\tbreak;\n\tcase TOD.DISABLED:\n\t\treturn prevSunHeight;\n\t\tbreak;\n\tcase TOD.LOCALTIME:\n\t\ttimeOfDay = engine.timeOfDay;\n\t\tbreak;\n\t}\n\tlet hour = Math.abs((timeOfDay - 0.5) * 24);\n\tif (hour < 6)\n\t\treturn 12;\n\telse if (hour > 8)\n\t\treturn 1;\n\telse\n\t\treturn Math.floor(lerp(12, 1, (hour - 6) * 0.5));\n}\n\n\n\nfunction loadBG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `BG${sunHeight}`,\n\t\timage: `models/BG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"bg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"visible\" : true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 1.0;\\n}\\n\",\n\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"BGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadFG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FG${sunHeight}`,\n\t\timage: `models/FG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 3.0;\\n}\\n\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"FGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadLamps(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FGLamps${sunHeight}`,\n\t\timage: `models/FGLamps${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"repeat\" : \"1 1\",\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}",
+				"script" : "'use strict';\n\nconst SECONDS_TO_MINUTES = 1 / 60;\n\nfunction clamp(val, min, max) {return Math.min(max, Math.max(val, min))}\n\n/** Whether the lamps in the foreground should be rendered or not. */\nlet foreground_lamps = true;\n/** Length of the day in minutes. */\nlet day_length = 5;\n/** The currently visible background layer .*/\nlet activeBG = undefined;\n/** The currently visible foreground layer. */\nlet activeFG = undefined;\n/** The currently visible foreground lamps layer. */\nlet activeLamps = undefined;\n/** The 'sun height' (1-12) value from the previous frame. */\nlet prevSunHeight = 0;\n/** The manually selected hour when using Manual mode. */\nlet selectedHour = 1;\n\n// How the wallpaper should calculate the current time of day.\nconst TOD = {\n\tENABLED   : 0,\n\tDISABLED  : 1,\n\tLOCALTIME : 2\n}; Object.freeze(TOD);\nlet timeOfDayMode = TOD.ENABLED;\n\nlet timeOfDay = 0;\n\n/** Register assets for publishing */\nfor (let i = 1; i <= 12; ++i) {\n\tengine.registerAsset(`models/BG${i}.json`);\n\tengine.registerAsset(`models/FG${i}.json`);\n\tengine.registerAsset(`models/FGLamps${i}.json`);\n}\n\n/** Linearly interpolates between two values based on the third value */\nfunction lerp(a, b, t) { return a + (b-a)*t; }\n\n\n\n\nexport function init() {\n\t// Precache background and foreground layers\n\tfor (let i = 1; i <= 12; ++i) {\n\t\tloadBG(i).visible = false;\n\t\tloadFG(i).visible = false;\n\t\tloadLamps(i).visible = false;\n\t}\n}\n\n\n\nexport function update() {\n\tlet sunHeight = getSunHeight();\n\tif (sunHeight != prevSunHeight)\n\t{\n\t\tif (activeBG)\n\t\t\tactiveBG.visible = false;\n\t\tif (activeFG)\n\t\t\tactiveFG.visible = false;\n\t\tif (activeLamps)\n\t\t\tactiveLamps.visible = false;\n\n\t\tactiveBG = thisScene.getLayer(`BG${sunHeight}`) || loadBG(sunHeight);\n\t\tthisScene.sortLayer(activeBG, thisScene.getLayerIndex(thisLayer) + 1);\n\n\t\tactiveFG = thisScene.getLayer(`FG${sunHeight}`) || loadFG(sunHeight);\n\t\tthisScene.sortLayer(activeFG, thisScene.getLayerIndex(activeBG) + 1);\n\n\t\tactiveLamps = thisScene.getLayer(`FGLamps${sunHeight}`) || loadLamps(sunHeight);\n\t\tthisScene.sortLayer(activeLamps, thisScene.getLayerIndex(\"Pixel step (512x256 White) (Unused)\") - 1);\n\n\t\tactiveBG.visible = true;\n\t\tactiveFG.visible = true;\n\t\tactiveLamps.visible = foreground_lamps;\n\t}\n\t\n\tprevSunHeight = sunHeight;\n}\n\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.day_length != undefined)\n\t\tday_length = userProperties.day_length;\n\tif (userProperties.time_of_day != undefined)\n\t\ttimeOfDayMode = userProperties.time_of_day;\n\tif (userProperties.foreground_lamps != undefined)\n\t\tforeground_lamps = userProperties.foreground_lamps;\n\tif (activeLamps)\n\t\tactiveLamps.visible = foreground_lamps;\n\tif (userProperties.hour !== undefined)\n\t\tselectedHour = userProperties.hour;\n}\n\n\n\n/**\n * Returns a number between 1-12, where 1 means the sun is completely down, and 12 means it is day time.\n */\nfunction getSunHeight() {\n\tswitch (parseInt(timeOfDayMode)) {\n\tcase TOD.ENABLED:\n\tdefault:\n\t\t//console.log(\"enabled\");\n\t\ttimeOfDay += engine.frametime * SECONDS_TO_MINUTES / Math.max(day_length, 0.5);\n\t\ttimeOfDay %= 1;\n\t\tbreak;\n\tcase TOD.DISABLED:\n\t\t//console.log(\"disabled\");\n\t\treturn clamp(selectedHour, 1, 12);\n\t\tbreak;\n\tcase TOD.LOCALTIME:\n\t\t//console.log(\"clock\");\n\t\ttimeOfDay = engine.timeOfDay;\n\t\tbreak;\n\t}\n\tlet hour = Math.abs((timeOfDay - 0.5) * 24);\n\tif (hour < 5)\n\t\treturn 12;\n\telse if (hour > 8)\n\t\treturn 1;\n\telse\n\t\treturn Math.floor(lerp(12, 1, (hour - 5) * 0.3333));\n}\n\n\n\nfunction loadBG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `BG${sunHeight}`,\n\t\timage: `models/BG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"bg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"visible\" : true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 1.0;\\n}\\n\",\n\t\t\t\t\t\t\t\t\"value\" : 1\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"BGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadFG(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FG${sunHeight}`,\n\t\timage: `models/FG${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/Perspective_Mask/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"scale\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"script\" : \"'use strict';\\n\\n/**\\n * @param {Object} userProperties\\n */\\nexport function applyUserProperties(userProperties) {\\n\\tif (userProperties.perspective !== undefined)\\n\\t\\tthisObject.scale = userProperties.perspective * 3.0;\\n}\\n\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"textures\" : [ null, \"FGDepth\" ]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}\n\n\n\nfunction loadLamps(sunHeight) {\n\treturn thisScene.createLayer({\n\t\tname: `FGLamps${sunHeight}`,\n\t\timage: `models/FGLamps${sunHeight}.json`,\n\t\torigin: `256 128 0`,\n\t\tsize: `512.000 256.000`,\n\t\teffects: \n\t\t[\n\t\t\t{\n\t\t\t\t\"file\" : \"effects/scroll/effect.json\",\n\t\t\t\t\"passes\" : \n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"constantshadervalues\" : \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"repeat\" : \"1 1\",\n\t\t\t\t\t\t\t\"speedx\" : \n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"user\" : \"fg_speed\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"speedy\" : 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t});\n}",
+				"value" : false
+			}
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 201,
+			"image" : "models/util/solidlayer.json",
+			"ledsource" : false,
+			"locktransforms" : true,
+			"name" : "Music script",
+			"origin" : "256.000 128.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "0.000 0.000",
+			"solid" : true,
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n/** Which song the wallpaper is set to play. */\nlet currentMusic = `none`;\n\n/** Contains the sound layers which are currently playing music. */\nlet musicLayers = [];\n\n// /** The delay before we start playing the looping portion of the intro stage music. */\n// const introDelay = 1.432;\n\n// /** The delay before we start playing the looping portion of the credits music. */\n// const castingsDelay = 15.467;\n\n/** How much time is left before we start playing the looping clip. */\n// let timeTillLoop = 0;\n\n/** Allows us to delay starting the loop track by 1 frame since it seems to begin early. */\n// let startLoopNextFrame = false;\n\n\n// Register the sound files so that they get published with the wallpaper.\nengine.registerAsset(`sounds/Intro Stage Intro.mp3`);\nengine.registerAsset(`sounds/Intro Stage Loop.mp3`);\nengine.registerAsset(`sounds/Castings Intro.mp3`);\nengine.registerAsset(`sounds/Castings Loop.mp3`);\n\n\n\n/**\n * @param {Object} changedUserProperties - only includes user properties that were recently changed!\n */\nexport function applyUserProperties(changedUserProperties) {\n\tif (changedUserProperties.music !== undefined && currentMusic !== changedUserProperties.music) {\n\t\tcurrentMusic = changedUserProperties.music;\n\n\t\tmusicLayers.forEach(\n\t\t\tfunction(musicLayer, index, array) {\n\t\t\t\tmusicLayer.stop();\n\t\t\t\tthisScene.destroyLayer(musicLayer);\n\t\t\t}\n\t\t);\n\t\tmusicLayers.splice(0, musicLayers.length);\n\n\t\tswitch (changedUserProperties.music) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tbreak;\n\n\t\t\tcase `intro`:\n\t\t\t\t// musicLayers.push(\n\t\t\t\t// \tthisScene.createLayer( {\n\t\t\t\t// \t\tname : \"Intro Stage Intro.mp3\",\n\t\t\t\t// \t\tplaybackmode : \"single\",\n\t\t\t\t// \t\tsound : [ \"sounds/Intro Stage Intro.mp3\" ],\n\t\t\t\t// \t\tstartsilent : false,\n\t\t\t\t// \t\tvolume : 0.67\n\t\t\t\t// \t} )\n\t\t\t\t// );\n\t\t\t\tmusicLayers.push(\n\t\t\t\t\tthisScene.createLayer( {\n\t\t\t\t\t\tname : \"Intro Stage Loop.mp3\",\n\t\t\t\t\t\tplaybackmode : \"loop\",\n\t\t\t\t\t\tsound : [ \"sounds/Intro Stage Loop.mp3\" ],\n\t\t\t\t\t\tstartsilent : false,\n\t\t\t\t\t\tvolume : 0.67\n\t\t\t\t\t} )\n\t\t\t\t);\n\t\t\t\tbreak;\n\n\t\t\tcase `credits`:\n\t\t\t\t// musicLayers.push(\n\t\t\t\t// \tthisScene.createLayer( {\n\t\t\t\t// \t\tname : \"Castings Intro.mp3\",\n\t\t\t\t// \t\tplaybackmode : \"single\",\n\t\t\t\t// \t\tsound : [ \"sounds/Castings Intro.mp3\" ],\n\t\t\t\t// \t\tstartsilent : false,\n\t\t\t\t// \t\tvolume : 0.67\n\t\t\t\t// \t} )\n\t\t\t\t// );\n\t\t\t\tmusicLayers.push(\n\t\t\t\t\tthisScene.createLayer( {\n\t\t\t\t\t\tname : \"Castings Loop.mp3\",\n\t\t\t\t\t\tplaybackmode : \"loop\",\n\t\t\t\t\t\tsound : [ \"sounds/Castings Loop.mp3\" ],\n\t\t\t\t\t\tstartsilent : false,\n\t\t\t\t\t\tvolume : 0.67\n\t\t\t\t\t} )\n\t\t\t\t);\n\t\t\t\tbreak;\n\t\t}\n\t}\n}\n\n\n\n\n\n// export function update() {\n\n// \tlet musicIsPlaying = false;\n// \tmusicLayers.forEach(\n// \t\tfunction(musicLayer, index, array) {\n// \t\t\tif (musicLayer.isPlaying())\n// \t\t\t\tmusicIsPlaying = true;\n// \t\t}\n// \t);\n\n// \tif (!musicIsPlaying && timeTillLoop <= 0 && currentMusic !== `none`) {\n// \t\t// console.log(`intro finished`);\n// \t\ttimeTillLoop = .001;\n// \t}\n\n// \tif (timeTillLoop > 0) {\n// \t\ttimeTillLoop -= engine.frametime;\n// \t\tif (timeTillLoop <= 0 && !musicIsPlaying) {\n// \t\t\t// console.log(`loop starting`);\n// \t\t\tswitch (currentMusic) {\n// \t\t\t\tcase `none`:\n// \t\t\t\tdefault:\n// \t\t\t\t\tbreak;\n\n// \t\t\t\tcase `intro`:\n// \t\t\t\t\tmusicLayers.push(\n// \t\t\t\t\t\tthisScene.createLayer( {\n// \t\t\t\t\t\t\tname : \"Intro Stage Loop.mp3\",\n// \t\t\t\t\t\t\tplaybackmode : \"loop\",\n// \t\t\t\t\t\t\tsound : [ \"sounds/Intro Stage Loop.mp3\" ],\n// \t\t\t\t\t\t\tstartsilent : false,\n// \t\t\t\t\t\t\tvolume : 0.67\n// \t\t\t\t\t\t} )\n// \t\t\t\t\t);\n\t\t\t\t\t\n// \t\t\t\t\tbreak;\n\n// \t\t\t\tcase `credits`:\n// \t\t\t\t\tmusicLayers.push(\n// \t\t\t\t\t\tthisScene.createLayer( {\n// \t\t\t\t\t\t\tname : \"Castings Loop.mp3\",\n// \t\t\t\t\t\t\tplaybackmode : \"loop\",\n// \t\t\t\t\t\t\tsound : [ \"sounds/Castings Loop.mp3\" ],\n// \t\t\t\t\t\t\tstartsilent : false,\n// \t\t\t\t\t\t\tvolume : 0.67\n// \t\t\t\t\t\t} )\n// \t\t\t\t\t);\n// \t\t\t\t\tbreak;\n// \t\t\t}\n// \t\t}\n// \t}\n// }\n",
 				"value" : false
 			}
 		},
@@ -90,30 +130,14 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
-			"effects" : 
-			[
-				{
-					"file" : "effects/opacity/effect.json",
-					"id" : 314,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"id" : 315,
-							"textures" : [ null, "util/white" ]
-						}
-					],
-					"visible" : false
-				}
-			],
 			"id" : 25,
 			"image" : "models/MMX1BodyRun.json",
 			"ledsource" : false,
 			"locktransforms" : false,
-			"name" : "MMX1BodyRun",
+			"name" : "MMX1BodyRun (Armor Script)",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n// let position = 0.25;\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.megaman_position !== undefined)\n\t{\n\t\t// position = userProperties.megaman_position;\n\n\t\tlet newPos = new Vec3(engine.canvasSize.x * userProperties.megaman_position, thisLayer.origin.y, thisLayer.origin.z);\n\n\t\tthisLayer.origin = newPos;\n\t\tthisScene.getLayer(\"MMX1HelmetRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX2HelmetRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX1ArmsRun\").origin = newPos;\n\t\tthisScene.getLayer(\"MMX1BootsRun\").origin = newPos;\n\t}\n\tif (userProperties.show_megaman !== undefined)\n\t{\n\t\tlet alpha = new Vec3(userProperties.show_megaman ? 1 : 0);\n\t\tthisLayer.scale = alpha;\n\t\tthisScene.getLayer(\"MMX1HelmetRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX2HelmetRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX1ArmsRun\").scale = alpha;\n\t\tthisScene.getLayer(\"MMX1BootsRun\").scale = alpha;\n\t}\n}\n",
+				"script" : "'use strict';\n\nlet currentHelmet = `none`;\nlet currentArmor = `none`;\nlet currentArms = `none`;\nlet currentBoots = `none`;\nlet hideAll = false;\n\nlet allHelmets = [];\nlet allArmors = [];\nlet allArms = [];\nlet allBoots = [];\n\nlet allLayers = [];\n\n\n\nexport function init() {\n\tallHelmets = [\n\t\tthisScene.getLayer(\"MMX1HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX2HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX3HelmetRun\")\n\t];\n\tallArmors = [\n\t\tthisScene.getLayer(\"MMX1ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmorRun\")\n\t];\n\tallArms = [\n\t\tthisScene.getLayer(\"MMX1ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmsRun\")\n\t];\n\tallBoots = [\n\t\tthisScene.getLayer(\"MMX1BootsRun\"),\n\t\tthisScene.getLayer(\"MMX2BootsRun\"),\n\t\tthisScene.getLayer(\"MMX3BootsRun\")\n\t];\n\t\n\tallLayers = [thisLayer].concat(allHelmets, allArmors, allArms, allBoots);\n}\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.helmet !== undefined) {\n\t\tcurrentHelmet = userProperties.helmet;\n\t}\n\tif (userProperties.armor !== undefined) {\n\t\tcurrentArmor = userProperties.armor;\n\t}\n\tif (userProperties.arms !== undefined) {\n\t\tcurrentArms = userProperties.arms;\n\t}\n\tif (userProperties.boots !== undefined) {\n\t\tcurrentBoots = userProperties.boots;\n\t}\n\tif (userProperties.megaman_position !== undefined) {\n\t\tlet newPos = new Vec3(engine.canvasSize.x * userProperties.megaman_position, thisLayer.origin.y, thisLayer.origin.z);\n\n\t\tfor (let layer of allLayers) {\n\t\t\tlayer.origin = newPos;\n\t\t}\n\t}\n\tif (userProperties.show_megaman !== undefined) {\n\t\thideAll = !userProperties.show_megaman;\n\t}\n\n\tfor (let layer of allLayers) {\n\t\tlayer.scale = new Vec3(0);\n\t}\n\tif (!hideAll) {\n\t\tswitch (currentHelmet) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArmor) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArms) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentBoots) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t}\n\n}",
 				"value" : "256.000 131.000 0.000"
 			},
 			"parallaxDepth" : "1.000 1.000",
@@ -121,7 +145,7 @@
 			"scale" : "1.000 1.000 1.000",
 			"size" : "40.000 36.000",
 			"solid" : true,
-			"visible" : false
+			"visible" : true
 		},
 		{
 			"alignment" : "center",
@@ -161,7 +185,27 @@
 			"scale" : "1.000 1.000 1.000",
 			"size" : "40.000 36.000",
 			"solid" : true,
-			"visible" : false
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 345,
+			"image" : "models/MMX3HelmetRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX3HelmetRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
 		},
 		{
 			"alignment" : "center",
@@ -175,7 +219,47 @@
 			"ledsource" : false,
 			"locktransforms" : false,
 			"name" : "MMX1ArmorRun",
-			"origin" : "256.000 128.000 0.000",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 326,
+			"image" : "models/MMX2ArmorRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX2ArmorRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 359,
+			"image" : "models/MMX3ArmorRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX3ArmorRun",
+			"origin" : "256.000 131.000 0.000",
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
 			"scale" : "1.000 1.000 1.000",
@@ -195,6 +279,46 @@
 			"ledsource" : false,
 			"locktransforms" : false,
 			"name" : "MMX1ArmsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 330,
+			"image" : "models/MMX2ArmsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX2ArmsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 372,
+			"image" : "models/MMX3ArmsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX3ArmsRun",
 			"origin" : "256.000 131.000 0.000",
 			"parallaxDepth" : "1.000 1.000",
 			"perspective" : false,
@@ -230,6 +354,46 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
+			"id" : 339,
+			"image" : "models/MMX2BootsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX2BootsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
+			"id" : 377,
+			"image" : "models/MMX3BootsRun.json",
+			"ledsource" : false,
+			"locktransforms" : false,
+			"name" : "MMX3BootsRun",
+			"origin" : "256.000 131.000 0.000",
+			"parallaxDepth" : "1.000 1.000",
+			"perspective" : false,
+			"scale" : "1.000 1.000 1.000",
+			"size" : "40.000 36.000",
+			"solid" : true,
+			"visible" : true
+		},
+		{
+			"alignment" : "center",
+			"alpha" : 1.0,
+			"angles" : "0.000 0.000 0.000",
+			"color" : "1.000 1.000 1.000",
+			"colorBlendMode" : 0,
+			"copybackground" : true,
 			"effects" : 
 			[
 				{
@@ -248,8 +412,7 @@
 									"value" : 0.375
 								},
 								"speedy" : 0
-							},
-							"id" : 548
+							}
 						}
 					],
 					"visible" : true
@@ -265,7 +428,6 @@
 							{
 								"WRITEALPHA" : 0
 							},
-							"id" : 481,
 							"textures" : [ null, "util/white" ]
 						}
 					],
@@ -275,12 +437,7 @@
 					"file" : "effects/transform/effect.json",
 					"id" : 155,
 					"name" : "Sharpen Pixels (Null Transform)",
-					"passes" : 
-					[
-						{
-							"id" : 156
-						}
-					],
+					"passes" : [ {} ],
 					"visible" : true
 				}
 			],
@@ -320,8 +477,7 @@
 							"combos" : 
 							{
 								"MODE" : 0
-							},
-							"id" : 126
+							}
 						}
 					],
 					"visible" : true
@@ -357,7 +513,6 @@
 					"passes" : 
 					[
 						{
-							"id" : 143,
 							"textures" : [ null, "_rt_imageLayerComposite_123_a" ]
 						}
 					],
@@ -380,8 +535,7 @@
 								"angle" : 0.0,
 								"offset" : "0 0",
 								"scale" : "1 1"
-							},
-							"id" : 151
+							}
 						}
 					],
 					"visible" : true
@@ -410,7 +564,6 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
-			"dependencies" : [ 362, 362 ],
 			"effects" : 
 			[
 				{
@@ -440,7 +593,6 @@
 									"value" : "512 256"
 								}
 							},
-							"id" : 837,
 							"textures" : [ null, "pixel" ]
 						}
 					],
@@ -452,9 +604,7 @@
 					"name" : "CRT Glow (Lighten)",
 					"passes" : 
 					[
-						{
-							"id" : 398
-						},
+						{},
 						{
 							"combos" : 
 							{
@@ -463,8 +613,7 @@
 							"constantshadervalues" : 
 							{
 								"scale" : "1 1"
-							},
-							"id" : 399
+							}
 						},
 						{
 							"combos" : 
@@ -475,8 +624,7 @@
 							"constantshadervalues" : 
 							{
 								"scale" : "1 1"
-							},
-							"id" : 400
+							}
 						},
 						{
 							"combos" : 
@@ -495,7 +643,6 @@
 								"compositecolor" : "1 1 1",
 								"compositeoffset" : "0 0"
 							},
-							"id" : 401,
 							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_b" ]
 						}
 					],
@@ -507,23 +654,19 @@
 					"name" : "",
 					"passes" : 
 					[
-						{
-							"id" : 626
-						},
+						{},
 						{
 							"combos" : 
 							{
 								"KERNEL" : 2
-							},
-							"id" : 627
+							}
 						},
 						{
 							"combos" : 
 							{
 								"KERNEL" : 2,
 								"VERTICAL" : 1
-							},
-							"id" : 628
+							}
 						},
 						{
 							"combos" : 
@@ -540,7 +683,6 @@
 								},
 								"compositeoffset" : "0 0"
 							},
-							"id" : 629,
 							"textures" : [ null, "util/white", "_rt_imageLayerComposite_362_a" ]
 						}
 					],
@@ -566,7 +708,6 @@
 									"value" : 0.5
 								}
 							},
-							"id" : 564,
 							"textures" : [ null, "Vignette" ]
 						}
 					],
@@ -593,8 +734,7 @@
 									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(1.0 + userProperties.crt_effect * .05);\n}\n",
 									"value" : "1.05 1.05"
 								}
-							},
-							"id" : 447
+							}
 						}
 					],
 					"visible" : true
@@ -623,8 +763,7 @@
 									"script" : "// // Fisheye - Size\n// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.size = 1.0 + userProperties.crt_effect * .5;\n// }\n",
 									"value" : 1.5
 								}
-							},
-							"id" : 365
+							}
 						}
 					],
 					"visible" : true
@@ -651,7 +790,6 @@
 									"value" : "1 1"
 								}
 							},
-							"id" : 313,
 							"textures" : [ null, "CRT Border" ]
 						}
 					],
@@ -682,7 +820,6 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
-			"dependencies" : [ 207, 207 ],
 			"effects" : 
 			[
 				{
@@ -711,7 +848,6 @@
 									"value" : "512 256"
 								}
 							},
-							"id" : 214,
 							"textures" : [ null, "rgb_pixel" ]
 						}
 					],
@@ -723,9 +859,7 @@
 					"name" : "CRT Glow (Linear Dodge)",
 					"passes" : 
 					[
-						{
-							"id" : 335
-						},
+						{},
 						{
 							"combos" : 
 							{
@@ -734,8 +868,7 @@
 							"constantshadervalues" : 
 							{
 								"scale" : "1 1"
-							},
-							"id" : 337
+							}
 						},
 						{
 							"combos" : 
@@ -746,8 +879,7 @@
 							"constantshadervalues" : 
 							{
 								"scale" : "1 1"
-							},
-							"id" : 338
+							}
 						},
 						{
 							"combos" : 
@@ -764,7 +896,6 @@
 								},
 								"compositeoffset" : "0 0"
 							},
-							"id" : 340,
 							"textures" : [ null, "util/white", "_rt_imageLayerComposite_207_b" ]
 						}
 					],
@@ -776,23 +907,19 @@
 					"name" : "",
 					"passes" : 
 					[
-						{
-							"id" : 369
-						},
+						{},
 						{
 							"combos" : 
 							{
 								"KERNEL" : 2
-							},
-							"id" : 373
+							}
 						},
 						{
 							"combos" : 
 							{
 								"KERNEL" : 2,
 								"VERTICAL" : 1
-							},
-							"id" : 376
+							}
 						},
 						{
 							"combos" : 
@@ -809,7 +936,6 @@
 								},
 								"compositeoffset" : "0 0"
 							},
-							"id" : 378,
 							"textures" : [ null, "util/white", "_rt_imageLayerComposite_207_a" ]
 						}
 					],
@@ -835,7 +961,6 @@
 									"value" : 0.5
 								}
 							},
-							"id" : 258,
 							"textures" : [ null, "Vignette" ]
 						}
 					],
@@ -862,8 +987,7 @@
 									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.scale = new Vec2(1.0 + userProperties.crt_effect * .05);\n}\n",
 									"value" : "1.05 1.05"
 								}
-							},
-							"id" : 272
+							}
 						}
 					],
 					"visible" : true
@@ -892,8 +1016,7 @@
 									"script" : "// // Fisheye - Size\n// 'use strict';\n\n// /**\n//  * @param {Object} userProperties\n//  */\n// export function applyUserProperties(userProperties) {\n// \tif (userProperties.crt_effect !== undefined)\n// \t\tthisObject.size = 1.0 + userProperties.crt_effect * .5;\n// }\n",
 									"value" : 1.5
 								}
-							},
-							"id" : 283
+							}
 						}
 					],
 					"visible" : true
@@ -920,7 +1043,6 @@
 									"value" : "1 1"
 								}
 							},
-							"id" : 296,
 							"textures" : [ null, "CRT Border" ]
 						}
 					],
