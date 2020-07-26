@@ -1,7 +1,7 @@
 {
 	"approved" : true,
 	"contentrating" : "Everyone",
-	"description" : "Mega Man X running along the highway.\n\nIn the future I plan to add a time of day system, and the ability to swap out various armor upgrades for X.\n\n\n\ntags: mega man megaman X video game SNES CRT retro pixel art city night lights time of day cyberpunk future robot cyborg",
+	"description" : "Mega Man X running along a future highway.\n\nFeatures a time of day system, two music options, a retro CRT/screen-door effect, and the ability to swap out various armor upgrades for X.\n\n\n\ntags: mega man megaman X video game SNES CRT retro pixel art city night lights time of day cyberpunk future robot cyborg android lemons",
 	"file" : "scene.json",
 	"general" : 
 	{
@@ -316,7 +316,7 @@
 	"tags" : [ "Game" ],
 	"title" : "Mega Man X - Endless Highway",
 	"type" : "scene",
-	"version" : 2,
+	"version" : 3,
 	"visibility" : "public",
 	"workshopid" : "2091399391"
 }
