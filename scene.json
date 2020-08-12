@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "0.000 0.000 0.000",
-		"eye" : "0.000 0.000 1.000",
+		"center" : "0.000 0.000 -1.000",
+		"eye" : "0.000 0.000 0.000",
 		"up" : "0.000 1.000 0.000"
 	},
 	"general" : 
@@ -31,7 +31,8 @@
 			"height" : 256,
 			"width" : 512
 		},
-		"skylightcolor" : "0.300 0.300 0.300"
+		"skylightcolor" : "0.300 0.300 0.300",
+		"zoom" : 1.0
 	},
 	"objects" : 
 	[
@@ -58,6 +59,58 @@
 			"color" : "1.000 1.000 1.000",
 			"colorBlendMode" : 0,
 			"copybackground" : true,
+			"effects" : 
+			[
+				{
+					"file" : "effects/scroll/effect.json",
+					"id" : 568,
+					"name" : "Scroll (unused, except for publishing)",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"repeat" : "1.000 1.000",
+								"speedx" : 0,
+								"speedy" : 0
+							}
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/Perspective_Mask/effect.json",
+					"id" : 392,
+					"name" : "Perspective Mask BGDepth (unused, except for publishing)",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : 0
+							},
+							"textures" : [ null, "BGDepth" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/Perspective_Mask/effect.json",
+					"id" : 229,
+					"name" : "Perspective Mask FGDepth (unused, except for publishing)",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : 0
+							},
+							"textures" : [ null, "FGDepth" ]
+						}
+					],
+					"visible" : false
+				}
+			],
 			"id" : 223,
 			"image" : "models/util/solidlayer.json",
 			"ledsource" : false,
@@ -137,7 +190,7 @@
 			"name" : "MMX1BodyRun (Armor Script)",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\nlet currentHelmet = `none`;\nlet currentArmor = `none`;\nlet currentArms = `none`;\nlet currentBoots = `none`;\nlet hideAll = false;\n\nlet allHelmets = [];\nlet allArmors = [];\nlet allArms = [];\nlet allBoots = [];\n\nlet allLayers = [];\n\n\n\nexport function init() {\n\tallHelmets = [\n\t\tthisScene.getLayer(\"MMX1HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX2HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX3HelmetRun\")\n\t];\n\tallArmors = [\n\t\tthisScene.getLayer(\"MMX1ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmorRun\")\n\t];\n\tallArms = [\n\t\tthisScene.getLayer(\"MMX1ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmsRun\")\n\t];\n\tallBoots = [\n\t\tthisScene.getLayer(\"MMX1BootsRun\"),\n\t\tthisScene.getLayer(\"MMX2BootsRun\"),\n\t\tthisScene.getLayer(\"MMX3BootsRun\")\n\t];\n\t\n\tallLayers = [thisLayer].concat(allHelmets, allArmors, allArms, allBoots);\n}\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.helmet !== undefined) {\n\t\tcurrentHelmet = userProperties.helmet;\n\t}\n\tif (userProperties.armor !== undefined) {\n\t\tcurrentArmor = userProperties.armor;\n\t}\n\tif (userProperties.arms !== undefined) {\n\t\tcurrentArms = userProperties.arms;\n\t}\n\tif (userProperties.boots !== undefined) {\n\t\tcurrentBoots = userProperties.boots;\n\t}\n\tif (userProperties.megaman_position !== undefined) {\n\t\tlet newPos = new Vec3(engine.canvasSize.x * userProperties.megaman_position, thisLayer.origin.y, thisLayer.origin.z);\n\n\t\tfor (let layer of allLayers) {\n\t\t\tlayer.origin = newPos;\n\t\t}\n\t}\n\tif (userProperties.show_megaman !== undefined) {\n\t\thideAll = !userProperties.show_megaman;\n\t}\n\n\tfor (let layer of allLayers) {\n\t\tlayer.scale = new Vec3(0);\n\t}\n\tif (!hideAll) {\n\t\tswitch (currentHelmet) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArmor) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArms) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentBoots) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t}\n\n}",
+				"script" : "'use strict';\n\nlet currentHelmet = `none`;\nlet currentArmor = `none`;\nlet currentArms = `none`;\nlet currentBoots = `none`;\nlet hideAll = false;\n\nlet allHelmets = [];\nlet allArmors = [];\nlet allArms = [];\nlet allBoots = [];\n\nlet allLayers = [];\n\n\n\nexport function init() {\n\tallHelmets = [\n\t\tthisScene.getLayer(\"MMX1HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX2HelmetRun\"),\n\t\tthisScene.getLayer(\"MMX3HelmetRun\")\n\t];\n\tallArmors = [\n\t\tthisScene.getLayer(\"MMX1ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmorRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmorRun\")\n\t];\n\tallArms = [\n\t\tthisScene.getLayer(\"MMX1ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX2ArmsRun\"),\n\t\tthisScene.getLayer(\"MMX3ArmsRun\")\n\t];\n\tallBoots = [\n\t\tthisScene.getLayer(\"MMX1BootsRun\"),\n\t\tthisScene.getLayer(\"MMX2BootsRun\"),\n\t\tthisScene.getLayer(\"MMX3BootsRun\")\n\t];\n\t\n\tallLayers = [thisLayer].concat(allHelmets, allArmors, allArms, allBoots);\n}\n\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.helmet !== undefined) {\n\t\tcurrentHelmet = userProperties.helmet;\n\t}\n\tif (userProperties.armor !== undefined) {\n\t\tcurrentArmor = userProperties.armor;\n\t}\n\tif (userProperties.arms !== undefined) {\n\t\tcurrentArms = userProperties.arms;\n\t}\n\tif (userProperties.boots !== undefined) {\n\t\tcurrentBoots = userProperties.boots;\n\t}\n\tif (userProperties.megaman_position !== undefined) {\n\t\tlet newPos = new Vec3(engine.canvasSize.x * userProperties.megaman_position, thisLayer.origin.y, thisLayer.origin.z);\n\n\t\tfor (let layer of allLayers) {\n\t\t\tlayer.origin = newPos;\n\t\t}\n\t}\n\tif (userProperties.show_megaman !== undefined) {\n\t\thideAll = !userProperties.show_megaman;\n\t}\n\n\tfor (let layer of allLayers) {\n\t\tlayer.scale = new Vec3(0);\n\t}\n\tif (!hideAll) {\n\t\tswitch (currentHelmet) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tthisLayer.scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3HelmetRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArmor) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmorRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentArms) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3ArmsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch (currentBoots) {\n\t\t\tcase `none`:\n\t\t\tdefault:\n\t\t\t\tbreak;\n\t\t\tcase `MMX1`:\n\t\t\t\tthisScene.getLayer(`MMX1BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX2`:\n\t\t\t\tthisScene.getLayer(`MMX2BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t\tcase `MMX3`:\n\t\t\t\tthisScene.getLayer(`MMX3BootsRun`).scale = new Vec3(1);\n\t\t\t\tbreak;\n\t\t}\n\t}\n\n}",
 				"value" : "256.000 131.000 0.000"
 			},
 			"parallaxDepth" : "1.000 1.000",
@@ -932,7 +985,8 @@
 								"compositealpha" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Object} userProperties\n */\nexport function applyUserProperties(userProperties) {\n\tif (userProperties.crt_effect !== undefined)\n\t\tthisObject.compositealpha = userProperties.crt_effect * 0.2;\n}\n",
-									"value" : 0.20000000298023224
+									"user" : null,
+									"value" : 1
 								},
 								"compositeoffset" : "0 0"
 							},

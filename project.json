@@ -111,7 +111,7 @@
 				"step" : 0.01,
 				"text" : "CRT Amount",
 				"type" : "slider",
-				"value" : 0.67000000000000004
+				"value" : 0.68999999999999995
 			},
 			"crt_type" : 
 			{
@@ -256,6 +256,7 @@
 			},
 			"perspective" : 
 			{
+				"condition" : "",
 				"fraction" : true,
 				"max" : 1.5,
 				"min" : 0,
@@ -264,7 +265,7 @@
 				"step" : 0.01,
 				"text" : "Scene Depth",
 				"type" : "slider",
-				"value" : 1
+				"value" : 0.68999999999999995
 			},
 			"schemecolor" : 
 			{
@@ -315,8 +316,8 @@
 	"preview" : "preview.gif",
 	"tags" : [ "Game" ],
 	"title" : "Mega Man X - Endless Highway",
-	"type" : "scene",
-	"version" : 3,
+	"type" : "Scene",
+	"version" : 6,
 	"visibility" : "public",
 	"workshopid" : "2091399391"
 }
